@@ -50,13 +50,23 @@ export const MockupRemaker: React.FC<MockupRemakerProps> = ({ onApiError }) => {
       setGeneratedImages(images);
     } catch (err: any) {
       console.error(err);
-      const errorMessage = err.message || err.toString();
-      // Check for common API key-related errors
-      if (errorMessage.toLowerCase().includes("api key") || errorMessage.includes("[400]")) {
-        setError("Lỗi API Key. Vui lòng kiểm tra lại key của bạn.");
-        onApiError();
+      let friendlyErrorMessage = "Đã xảy ra lỗi không xác định. Vui lòng thử lại.";
+      const rawErrorMessage = err.message || err.toString();
+      let triggerApiModal = false;
+
+      if (rawErrorMessage.includes("[400]") || rawErrorMessage.toLowerCase().includes("api key not valid")) {
+        friendlyErrorMessage = "API Key không hợp lệ. Vui lòng kiểm tra lại key của bạn và thử lại.";
+        triggerApiModal = true;
+      } else if (rawErrorMessage.includes("[429]") || rawErrorMessage.toLowerCase().includes("quota")) {
+        friendlyErrorMessage = "Bạn đã vượt quá hạn mức sử dụng miễn phí cho API Key này. Vui lòng kiểm tra thông tin thanh toán trên Google AI Studio hoặc sử dụng một API Key khác.";
+        triggerApiModal = true;
       } else {
-        setError(`Đã xảy ra lỗi khi tạo mockup: ${errorMessage}`);
+        friendlyErrorMessage = `Đã xảy ra lỗi khi tạo mockup. Chi tiết: ${rawErrorMessage}`;
+      }
+
+      setError(friendlyErrorMessage);
+      if (triggerApiModal) {
+        onApiError();
       }
     } finally {
       setIsLoading(false);
