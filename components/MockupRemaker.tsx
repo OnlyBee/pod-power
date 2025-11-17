@@ -37,7 +37,7 @@ export const MockupRemaker: React.FC<MockupRemakerProps> = ({ onApiError }) => {
 
   const handleGenerate = async () => {
     if (!selectedFile) {
-      setError("Please select an image first.");
+      setError("Vui lòng chọn một ảnh trước.");
       return;
     }
     
@@ -50,13 +50,13 @@ export const MockupRemaker: React.FC<MockupRemakerProps> = ({ onApiError }) => {
       setGeneratedImages(images);
     } catch (err: any) {
       console.error(err);
-      const errorMessage = err.toString();
+      const errorMessage = err.message || err.toString();
       // Check for common API key-related errors
-      if (errorMessage.includes("API key") || errorMessage.includes("400") || errorMessage.includes("API_KEY")) {
-        setError("Invalid or missing API Key. Please enter a valid key.");
+      if (errorMessage.toLowerCase().includes("api key") || errorMessage.includes("[400]")) {
+        setError("Lỗi API Key. Vui lòng kiểm tra lại key của bạn.");
         onApiError();
       } else {
-        setError("Failed to generate mockups. Please try again.");
+        setError(`Đã xảy ra lỗi khi tạo mockup: ${errorMessage}`);
       }
     } finally {
       setIsLoading(false);
