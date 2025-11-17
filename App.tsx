@@ -77,11 +77,6 @@ const App: React.FC = () => {
           {selectedFeature === 'mockup' && <MockupRemaker onApiError={handleApiError} />}
         </div>
       </main>
-      <footer className="text-center py-6 text-gray-400 text-sm">
-        <p className="italic text-base mb-2 px-2">"Hãy để Duy Bảo Nguyễn đưa mọi người đến với thành công với Print On Demand."</p>
-        <p className="mb-1">Created with ❤️ by <span className="font-bold text-white">Duy Bảo Nguyễn</span></p>
-        <p>Powered by Gemini API</p>
-      </footer>
     </div>
   );
 };
