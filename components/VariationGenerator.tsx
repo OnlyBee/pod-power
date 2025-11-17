@@ -39,11 +39,11 @@ export const VariationGenerator: React.FC<VariationGeneratorProps> = ({ onApiErr
 
   const handleGenerate = async () => {
     if (!selectedFile) {
-      setError("Please select an image first.");
+      setError("Vui lòng chọn một ảnh trước.");
       return;
     }
     if (selectedColors.length === 0) {
-      setError("Please select at least one color to generate.");
+      setError("Vui lòng chọn ít nhất một màu để tạo.");
       return;
     }
     
@@ -56,13 +56,13 @@ export const VariationGenerator: React.FC<VariationGeneratorProps> = ({ onApiErr
       setGeneratedImages(images);
     } catch (err: any) {
       console.error(err);
-      const errorMessage = err.toString();
-      // Check for common API key-related errors
-      if (errorMessage.includes("API key") || errorMessage.includes("400") || errorMessage.includes("API_KEY")) {
-        setError("Invalid or missing API Key. Please enter a valid key.");
+      const errorMessage = err.message || err.toString();
+      // Check for common API key-related errors. [400] is a common error for invalid API keys.
+      if (errorMessage.toLowerCase().includes("api key") || errorMessage.includes("[400]")) {
+        setError("Lỗi API Key. Vui lòng kiểm tra lại key của bạn.");
         onApiError();
       } else {
-        setError("Failed to generate variations. Please try again.");
+        setError(`Đã xảy ra lỗi khi tạo ảnh: ${errorMessage}`);
       }
     } finally {
       setIsLoading(false);
