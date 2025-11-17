@@ -1,5 +1,7 @@
+
 import { GoogleGenAI, Modality, Part } from "@google/genai";
 import type { GeneratedImage, Color, ApparelType } from "../types";
+import { getApiKey } from '../utils/apiKey';
 
 const fileToGenerativePart = async (file: File): Promise<Part> => {
   const base64EncodedDataPromise = new Promise<string>((resolve) => {
@@ -16,10 +18,9 @@ const fileToGenerativePart = async (file: File): Promise<Part> => {
 };
 
 const generateImage = async (imagePart: Part, prompt: string): Promise<string> => {
-    // API key được tự động đưa vào môi trường bởi aistudio sau khi người dùng chọn.
-    const apiKey = process.env.API_KEY;
+    const apiKey = getApiKey();
     if (!apiKey) {
-      throw new Error("API key is not available. Please select a key.");
+      throw new Error("API key not found. Please set your API key.");
     }
 
     const ai = new GoogleGenAI({ apiKey });

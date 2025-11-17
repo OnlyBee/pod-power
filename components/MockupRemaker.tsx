@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ImageUploader } from './ImageUploader';
 import { ImageGrid } from './ImageGrid';
@@ -54,14 +55,11 @@ export const MockupRemaker: React.FC<MockupRemakerProps> = ({ onApiError }) => {
       const rawErrorMessage = err.message || err.toString();
       let triggerApiErrorFlow = false;
 
-      if (rawErrorMessage.toLowerCase().includes("api key") || rawErrorMessage.includes("400") || rawErrorMessage.includes("403")) {
-        friendlyErrorMessage = "API Key đã chọn không hợp lệ hoặc không có quyền truy cập. Vui lòng chọn một API Key khác.";
+      if (rawErrorMessage.includes("API key not found") || rawErrorMessage.toLowerCase().includes("api key") || rawErrorMessage.includes("400") || rawErrorMessage.includes("403")) {
+        friendlyErrorMessage = "API Key không hợp lệ hoặc đã bị thu hồi. Vui lòng nhập một key mới.";
         triggerApiErrorFlow = true;
       } else if (rawErrorMessage.includes("quota") || rawErrorMessage.includes("429")) {
-        friendlyErrorMessage = "Bạn đã vượt quá hạn mức sử dụng cho API Key đã chọn. Vui lòng chọn một API Key khác hoặc kiểm tra thông tin thanh toán.";
-        triggerApiErrorFlow = true;
-      } else if (rawErrorMessage.includes("not found")) {
-        friendlyErrorMessage = "Không thể tìm thấy API được yêu cầu. Vui lòng chọn lại API key của bạn.";
+        friendlyErrorMessage = "Bạn đã vượt quá hạn mức sử dụng cho API Key này. Vui lòng nhập một key mới hoặc kiểm tra thông tin thanh toán.";
         triggerApiErrorFlow = true;
       } else {
         friendlyErrorMessage = `Đã xảy ra lỗi khi tạo mockup. Chi tiết: ${rawErrorMessage}`;

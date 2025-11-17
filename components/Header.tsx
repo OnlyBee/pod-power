@@ -9,7 +9,7 @@ export const Header: React.FC = () => {
           POD <span className="text-brand-primary">Power</span>
         </h1>
         <p className="text-base-content mt-1">Your AI Assistant for Print-On-Demand Success</p>
-        <p className="mb-1">Created with ❤️ by <span className="font-bold text-white">Duy Bảo Nguyễn</span></p>
+	<p className="mb-1">Created with ❤️ by <span className="font-bold text-white">Duy Bảo Nguyễn</span></p>
       </div>
     </header>
   );
