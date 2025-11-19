@@ -54,6 +54,38 @@ export const generateVariations = async (file: File, selectedColors: Color[]): P
   return Promise.all(promises);
 };
 
+const FLAT_LAY_PROPS = [
+    "jeans", // quần jean
+    "a flower pot", // chậu hoa
+    "a tree branch", // nhành cây
+    "a plain scarf", // khăn trơn
+    "a plaid scarf", // khăn caro
+    "sneakers", // giày sneaker
+    "a wool cardigan", // áo khoác len
+    "a hat", // mũ
+    "glasses", // mắc kính
+    "a watch", // đồng hồ
+    "a gift box", // hộp quà
+    "a glass jar", // lọ thủy tinh
+    "a cup", // cốc
+    "a flower branch", // nhành hoa
+    "pampas grass" // bông cỏ lau
+];
+
+const getRandomProps = (): string => {
+    // Shuffle array
+    const shuffled = [...FLAT_LAY_PROPS].sort(() => 0.5 - Math.random());
+    // Select 2 to 3 items
+    const count = Math.floor(Math.random() * 2) + 2; 
+    const selected = shuffled.slice(0, count);
+    
+    // Format natural language list (a, b, and c)
+    if (selected.length === 0) return "";
+    if (selected.length === 1) return selected[0];
+    const last = selected.pop();
+    return `${selected.join(", ")} and ${last}`;
+};
+
 export const remakeMockups = async (file: File, apparelTypes: ApparelType[]): Promise<GeneratedImage[]> => {
     const imagePart = await fileToGenerativePart(file);
 
@@ -66,7 +98,9 @@ export const remakeMockups = async (file: File, apparelTypes: ApparelType[]): Pr
 
         const modelPrompt = `${basePrompt} ${apparelTypeInstruction} Create a new, photorealistic mockup image of a person wearing this apparel. The background should be clean and neutral, suitable for an e-commerce product listing.`;
         
-        const flatLayPrompt = `${basePrompt} ${apparelTypeInstruction} Create a new, photorealistic flat-lay mockup image. The apparel should be neatly arranged on a complementary surface (like wood or linen). Add a few tasteful props like a scarf or pine cones. The overall aesthetic should be stylish and professional.`;
+        // Get random props for this specific generation
+        const randomProps = getRandomProps();
+        const flatLayPrompt = `${basePrompt} ${apparelTypeInstruction} Create a new, photorealistic flat-lay mockup image. The apparel should be neatly arranged on a complementary surface (like wood or linen). Add a few tasteful props like ${randomProps}. The overall aesthetic should be stylish and professional.`;
         
         const nameSuffix = apparelType ? `_${apparelType.toLowerCase().replace(/\s/g, '_')}` : '';
 
